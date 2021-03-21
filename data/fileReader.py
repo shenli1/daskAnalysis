@@ -17,7 +17,8 @@ def getParquetPath(db,table):
 def getDfFromParquet(db,table):
     path = getParquetPath(db,table)
     result = dd.read_parquet(path)
-    #result = result.set_index('id')
+    if 'id' in result.columns:
+        result = result.set_index('id')
     return result
 
 @time

@@ -1,12 +1,12 @@
-from optbinning import ContinuousOptimalBinning,OptimalBinning
-import pandas as pd
 import matplotlib.pyplot as plt
-import numpy as np
-
+import pandas as pd
+from optbinning import BinningProcess
+from optbinning import ContinuousOptimalBinning, OptimalBinning
+from optbinning import Scorecard
 from sklearn.linear_model import HuberRegressor
 
-from optbinning import BinningProcess
-from optbinning import Scorecard
+from model.backtest import runBackTest
+
 
 def isCategray(df):
     valueCounts = len(pd.unique(df))
@@ -14,23 +14,25 @@ def isCategray(df):
         return True
     return False
 
-def autoBinning(df,yCol,isContinue = True):
+
+def autoBinning(orginDf, yCol, isContinue=True):
     features = []
     toDropColumns = []
-    for col in df.columns:
+    for col in orginDf.columns:
         # print(modelInputs[col].dtype.kind)
-        if df[col].dtype.kind == 'f' or df[col].dtype.kind == 'i':
+        if orginDf[col].dtype.kind == 'f' or orginDf[col].dtype.kind == 'i':
             continue
         toDropColumns.append(col)
 
     print(toDropColumns)
-    df = df.drop(columns=toDropColumns)
+    df = orginDf.drop(columns=toDropColumns)
     ivList = []
     for col in df.columns:
-        print(col)
-        if(col == yCol):
-            continue
         try:
+            print(col)
+            if (col == yCol):
+                continue
+
             x = df[col].values
             y = df[yCol].values
             dtype = "numerical"
@@ -40,23 +42,25 @@ def autoBinning(df,yCol,isContinue = True):
             if isContinue:
                 optb = ContinuousOptimalBinning(name=col, dtype=dtype)
             optb.fit(x, y)
-            #print(optb.status)
+            # print(optb.status)
             binning_table = optb.binning_table
             binning_result = binning_table.build()
             print(binning_result)
             iv = binning_table.iv
             if iv > 0.02:
-                ivList.append([col,iv])
+                ivList.append([col, iv])
                 features.append(col)
+                runBackTest(orginDf, col, optb.splits)
             print(iv)
         except Exception as e:
             print(e)
-            pass
-    ivList.sort(key=lambda x:x[1],reverse=True)
+
+    ivList.sort(key=lambda x: x[1], reverse=True)
     print(ivList)
     return features
 
-def buildScoreCard(df,features,labelCol):
+
+def buildScoreCard(df, features, labelCol):
     binning_process = BinningProcess(features)
     estimator = HuberRegressor(max_iter=200)
     scorecard = Scorecard(binning_process=binning_process, target=labelCol,
@@ -75,6 +79,3 @@ def buildScoreCard(df,features,labelCol):
     plt.xlabel("Score")
     plt.legend()
     plt.show()
-
-
-
