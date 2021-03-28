@@ -4,7 +4,7 @@ from utils.timeUtils import time
 from utils.daskUtils import buildIndex
 import pandas as pd
 pd.set_option('display.max_columns', None)   # 显示完整的列
-pd.set_option('display.max_rows', 10)  # 显示完整的行
+pd.set_option('display.max_rows', None)  # 显示完整的行
 pd.set_option('display.expand_frame_repr', False)  # 设置不折叠数据
 
 basePath = 'E:\\data\\%s\\%s\\'

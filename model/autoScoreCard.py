@@ -40,7 +40,7 @@ def autoBinning(orginDf, yCol, isContinue=True):
                 dtype = "categorical"
             optb = OptimalBinning(name=col, dtype=dtype, solver="cp")
             if isContinue:
-                optb = ContinuousOptimalBinning(name=col, dtype=dtype)
+                optb = ContinuousOptimalBinning(name=col, dtype=dtype,monotonic_trend='auto_asc_desc')
             optb.fit(x, y)
             # print(optb.status)
             binning_table = optb.binning_table

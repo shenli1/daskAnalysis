@@ -22,4 +22,6 @@ def convertSqlToParquet(db,sql,table):
     saveDfToParquet(df,db,table)
 
 if __name__ == '__main__':
-    convertTableToParquet('vars','var_hk_hold')
+    convertSqlToParquet('joinquant', 'select * from jq_jq_factor_values where trade_date > "2017-03-17"','jq_jq_factor_values')
+    convertSqlToParquet('joinquant', 'select * from jq_a101_factor_values where trade_date > "2017-03-17"','jq_a101_factor_values')
+    convertSqlToParquet('joinquant', 'select * from jq_a191_factor_values where trade_date > "2017-03-17"','jq_a191_factor_values')
