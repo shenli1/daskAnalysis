@@ -2,6 +2,7 @@ from data.mysqlReader import getDfFromTable,showTables,getDfFromSql
 from data.fileReader import saveDfToParquet
 from utils.timeUtils import time
 from utils.daskUtils import buildIndex,rebuildCode
+from dask.distributed import Client
 
 @time
 def convertTableToParquet(db,table):
@@ -22,4 +23,5 @@ def convertSqlToParquet(db,sql,table):
     saveDfToParquet(df,db,table)
 
 if __name__ == '__main__':
-    convertTableToParquet('vars', 'var_hk_hold')
+    client = Client()
+    convertTableToParquet('joinquant', 'jq_stock_hk_hold',)

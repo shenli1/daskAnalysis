@@ -24,9 +24,9 @@ def chooseStock(date):
     df = df[(df['link_id'] == 310001) | (df['link_id'] == 310002)]
     df = df[['code','name','share_number','share_ratio']]
     df = df.set_index('code')
-    df = df.join(df_1, rsuffix='_1')
-    df = df.join(df_3, rsuffix='_3')
-    df = df.join(df_3, rsuffix='_30')
+    df = df.join(df_1, rsuffix='_1',how='left')
+    df = df.join(df_3, rsuffix='_3',how='left')
+    df = df.join(df_3, rsuffix='_30',how='left')
     capDf = get_fundamentals(query(valuation),now)[['code','capitalization','circulating_cap','market_cap']]
     capDf = capDf.set_index('code')
     df = df.join(capDf)

@@ -30,6 +30,6 @@ def compareResult(db,table,trade_date,leftCol,rightCol):
     return result
 
 if __name__ == '__main__':
-    result = compareResult('joinquant','jq_stock_hk_hold','2017-07-10','share_number','share_number')
+    result = compareResult('joinquant','jq_stock_hk_hold','2017-07-11','share_number','share_number')
 
     print(result)
