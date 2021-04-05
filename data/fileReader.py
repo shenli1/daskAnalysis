@@ -3,9 +3,6 @@ import dask.dataframe as dd
 from utils.timeUtils import time
 from utils.daskUtils import buildIndex
 import pandas as pd
-pd.set_option('display.max_columns', None)   # 显示完整的列
-pd.set_option('display.max_rows', None)  # 显示完整的行
-pd.set_option('display.expand_frame_repr', False)  # 设置不折叠数据
 
 basePath = 'E:\\data\\%s\\%s\\'
 
@@ -19,11 +16,13 @@ def getDfFromParquet(db,table):
     result = dd.read_parquet(path)
     if 'id' in result.columns:
         result = result.set_index('id')
+    else:
+        result = buildIndex(result)
     return result
 
 @time
 def saveDfToParquet(df,db,table):
-    #df = buildIndex(df)
+    df = buildIndex(df)
     if isinstance(df,pd.DataFrame):
         df = dd.from_pandas(df,npartitions=10)
     path = getParquetPath(db,table)

@@ -6,4 +6,4 @@ if __name__ == '__main__':
 
     df = getDfFromParquet('vars','var_profit')
     df = df[df['close'] != df['future_pre_close']]
-    print(df.compute())
+    print(df.compute()[['close','future_pre_close']])

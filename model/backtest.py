@@ -15,7 +15,7 @@ def runBackTest(df,featureCol,splits,profitCols = 'profit_1'):
     df = df.rename(columns={'trade_date':'date','code':'asset'})
     df = df.set_index(['date','asset'])
     factors = pd.Series(df[featureCol],index=df.index)
-    forwardRetrun = pd.DataFrame(df[profitCols] / 100 - 0.002,index=df.index)
+    forwardRetrun = pd.DataFrame(df[profitCols] / 100,index=df.index)
     forwardRetrun = forwardRetrun.rename(columns={profitCols:'1D'})
     factorData = alphalens.utils.get_clean_factor(factors,forwardRetrun,quantiles=None,bins=bins,max_loss=1)
 
